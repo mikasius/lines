@@ -1,7 +1,33 @@
+use std::{cmp::max, io::LineWriter};
+
 pub fn transform(input: &str, line_width: u32) -> String {
-    if !input return "";
-    
-    "".to_string()
+    // Check if input is empty.
+    if input.chars().count() == 0 {
+        return "".to_string();
+    }
+
+    // Get max word length from input.
+    let some = input.split_whitespace();
+    let max_len = max(some.map(|x| x.len() as u32).max(), Some(line_width)).unwrap();
+
+    let result: &str = "";
+    let chunk: &str = "";
+
+    for i in 0..max_len {
+        let curr = some.into_iter()[i];
+    }
+
+    for word in input.split_whitespace() {
+        if (word.len() as u32) < line_width {
+            let free_spaces = line_width - word.len() as u32;
+
+            return word.to_owned() + &" ".repeat(free_spaces.try_into().unwrap());
+        } else {
+            return word.to_owned() + &" ";
+        }
+    }
+
+    "Finished".to_string()
 }
 
 #[cfg(test)]
