@@ -15,18 +15,40 @@ pub fn transform(input: &str, line_width: u32) -> String {
     let mut result: String = "".to_owned();
     let mut chunk: String = "".to_owned();
 
-    for (index, word) in splitted.into_iter().enumerate() {
-        println!("begin -> {}: '{}'", word, chunk);
+    for word in splitted {
+        chunk.push_str(word);
+        let is_chunk_overflew = chunk.len() > max_len.unwrap();
 
-        if ((chunk.len() + word.len()) as u32) < 5 {
-            chunk.push_str(word);
+        // Overflow chunk.
+        // max_len: 5
+        // chunk: 'onethree' -> spaces: 5 - 8 = -3
+        if is_chunk_overflew {
+            let drain_range = chunk.find(word).unwrap_or(chunk.len());
+            let prev_chunk: String = chunk.drain(..drain_range).collect();
+            let spaces_to_add = chunk.len() - (prev_chunk.len() - 1);
+
+            chunk.push_str(&(" ".repeat(spaces_to_add) + &"\n".to_owned()));
+            result.push_str(&chunk);
         } else {
-            let free_spaces = max_len.unwrap() - chunk.len();
-            chunk.push_str(&" ".repeat(free_spaces.try_into().unwrap()));
+            // max_len: 9
+            // chunk: 'onethree' -> spaces: 9 - 8 = 1
+            let drain_range = chunk.find(word).unwrap_or(chunk.len());
+            let prev_chunk: String = chunk.drain(..drain_range).collect();
 
-            result.push_str(&(chunk.to_owned() + "n"));
-            chunk = word.to_string();
+            let spaces_to_add = chunk.len() - prev_chunk.len();
+
+            chunk.push_str(&(" ".repeat(spaces_to_add) + &"\n".to_owned()));
+            result.push_str(&chunk);
         }
+
+        // if (chunk.len()) < max_len.unwrap() {
+        //     // chunk.push_str(word);
+        // } else {
+        //     chunk.push_str(&" ".repeat(spaces.try_into().unwrap()));
+
+        //     result.push_str(&(chunk.to_owned() + "n"));
+        //     chunk = word.to_string();
+        // }
 
         println!("result -> {}: '{}'", word, result);
     }
