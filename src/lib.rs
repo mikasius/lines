@@ -1,4 +1,4 @@
-use std::{cmp::max, io::LineWriter};
+use std::cmp::max;
 
 pub fn transform(input: &str, line_width: u32) -> String {
     // Check if input is empty.
@@ -7,28 +7,28 @@ pub fn transform(input: &str, line_width: u32) -> String {
     }
 
     // Get max word length from input.
-    let some = input.split_whitespace();
-    let max_len = max(some.map(|x| x.len() as u32).max(), Some(line_width)).unwrap();
+    let splitted: Vec<_> = input.split_whitespace().collect();
+    let width = line_width as usize;
+    let max_len = max(splitted.iter().map(|x| x.len()).max(), Some(width));
 
+    // Initiate variables.
     let mut result: String = "".to_owned();
     let mut chunk: String = "".to_owned();
 
-    // for i in 0..max_len {
-    //     let curr = some.into_iter()[i];
-    // }
+    for (index, word) in splitted.into_iter().enumerate() {
+        println!("begin -> {}: '{}'", word, chunk);
 
-    for word in input.split_whitespace() {
-        if ((chunk.len() + word.len()) as u32) < max_len {
+        if ((chunk.len() + word.len()) as u32) < 5 {
             chunk.push_str(word);
         } else {
-            let free_spaces = max_len - word.len() as u32;
+            let free_spaces = max_len.unwrap() - chunk.len();
             chunk.push_str(&" ".repeat(free_spaces.try_into().unwrap()));
 
-            result.push_str(&(chunk.clone() + &"\n"));
+            result.push_str(&(chunk.to_owned() + "n"));
+            chunk = word.to_string();
         }
 
-        println!("'{}'", chunk);
-        println!("'{}'", result);
+        println!("result -> {}: '{}'", word, result);
     }
 
     return result.to_string();
