@@ -2,5 +2,7 @@ use lines::transform;
 
 // Created for debug purposes.
 pub fn main() {
-    transform("some something anotherstuff", 5);
+    let output = transform("some something anotherstuff", 5);
+
+    println!("'{}'", output);
 }

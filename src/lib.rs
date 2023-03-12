@@ -10,24 +10,28 @@ pub fn transform(input: &str, line_width: u32) -> String {
     let some = input.split_whitespace();
     let max_len = max(some.map(|x| x.len() as u32).max(), Some(line_width)).unwrap();
 
-    let result: &str = "";
-    let chunk: &str = "";
+    let mut result: String = "".to_owned();
+    let mut chunk: String = "".to_owned();
 
-    for i in 0..max_len {
-        let curr = some.into_iter()[i];
-    }
+    // for i in 0..max_len {
+    //     let curr = some.into_iter()[i];
+    // }
 
     for word in input.split_whitespace() {
-        if (word.len() as u32) < line_width {
-            let free_spaces = line_width - word.len() as u32;
-
-            return word.to_owned() + &" ".repeat(free_spaces.try_into().unwrap());
+        if ((chunk.len() + word.len()) as u32) < max_len {
+            chunk.push_str(word);
         } else {
-            return word.to_owned() + &" ";
+            let free_spaces = max_len - word.len() as u32;
+            chunk.push_str(&" ".repeat(free_spaces.try_into().unwrap()));
+
+            result.push_str(&(chunk.clone() + &"\n"));
         }
+
+        println!("'{}'", chunk);
+        println!("'{}'", result);
     }
 
-    "Finished".to_string()
+    return result.to_string();
 }
 
 #[cfg(test)]
